@@ -1,45 +1,53 @@
 package main;
 
+import inputs.KeyboardListener;
+import inputs.MouseListener;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GameScreen extends JPanel {
+public class GameScreen extends JPanel
+{
+	private final Game game;
 
-    private final Random rand = new Random();
-    private final BufferedImage img;
+	private MouseListener mouseListener;
+	private KeyboardListener keyboardListener;
 
-    private ArrayList<BufferedImage> sprites = new ArrayList<>();
+	public GameScreen(Game game)
+	{
+		this.game = game;
+		setPanelSize(640, 640);
+	}
 
-    public GameScreen(BufferedImage img) {
+	private void setPanelSize(int width, int height)
+	{
+		Dimension size = new Dimension(width, height);
 
-        this.img = img;
+		setPreferredSize(size);
+		setMaximumSize(size);
+		setMinimumSize(size);
+	}
 
-        loadSprites(32,32, 10,3);
-    }
+	public void initInputs()
+	{
+		mouseListener = new MouseListener(game);
+		keyboardListener = new KeyboardListener();
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+		addMouseListener(mouseListener);
+		addMouseMotionListener(mouseListener);
+		addKeyListener(keyboardListener);
 
+		requestFocus();
+	}
 
-        for(int y = 0; y < 20; y++) {
-            for(int x = 0; x < 20; x++) {
-                g.drawImage(sprites.get(rand.nextInt(sprites.size())), x * 32, y * 32, null);
-            }
-        }
-    }
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		game.getRender().render(g2d);
+	}
 
-    private void loadSprites(int spriteWidth, int spriteHeight, int numSpritesByRow, int numSpritesByColumn) {
-            for(int y = 0; y < numSpritesByColumn; y++) {
-                for(int x = 0; x < numSpritesByRow; x++) {
-                    sprites.add(img.getSubimage(x * spriteWidth,y * spriteHeight,spriteWidth,spriteHeight));
-                }
-            }
-    }
-
-    private Color getRandomColor() {
-        return new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
-    }
 }
