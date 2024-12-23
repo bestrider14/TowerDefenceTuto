@@ -66,7 +66,13 @@ public class MouseListener implements java.awt.event.MouseListener, MouseMotionL
 	@Override
 	public void mouseDragged(MouseEvent e)
 	{
-
+		switch (GameStates.gameState)
+		{
+			case PLAYING ->			game.getPlaying().mouseDragged(e.getX(), e.getY());
+			case MAIN_MENU ->		{}
+			case SETTINGS_MENU ->	{}
+			case EXIT_MENU ->		{}
+		}
 	}
 
 	@Override

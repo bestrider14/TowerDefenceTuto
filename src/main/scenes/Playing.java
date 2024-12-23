@@ -1,22 +1,23 @@
 package main.scenes;
 
 import main.Game;
-import main.GameStates;
 import main.managers.TileManager;
-import main.scenes.ui.Button;
+import main.objects.Tile;
+import main.scenes.ui.BottomBar;
 import utils.LevelBuilder;
 
 import java.awt.*;
 
-import static main.GameStates.MAIN_MENU;
-import static main.GameStates.PLAYING;
-
 public class Playing extends GameScene implements SceneMethods
 {
-	private int[][] level;
-	private TileManager tileManager;
+	private final int[][] level;
+	private final TileManager tileManager;
+	private final BottomBar bottomBar;
+	private int mouseX, mouseY;
+	private boolean drawSelection;
 
-	private Button buttonMenu;
+	private Tile selectedTile;
+	private int lastTileX, lastTileY, lastTileId;
 
 	private final String ATLAS_PATH = "spriteatlas.png";
 	private final int SPRITE_SIZE = 32;
@@ -25,15 +26,10 @@ public class Playing extends GameScene implements SceneMethods
 	{
 		super(game);
 
-		initButtons();
-
 		level = LevelBuilder.getLevelData();
 		tileManager = new TileManager(ATLAS_PATH);
-	}
 
-	private void initButtons()
-	{
-		buttonMenu = new Button("Menu", 25, 25, 100, 30);
+		bottomBar = new BottomBar(0, 640, 640, 100, this);
 	}
 
 	@Override
@@ -43,47 +39,96 @@ public class Playing extends GameScene implements SceneMethods
 			for (int x = 0; x < level[y].length; x++)
 				g.drawImage(tileManager.getTile(level[y][x]).getSprite(), x * SPRITE_SIZE, y * SPRITE_SIZE, null);
 
-		drawButtons(g);
+		bottomBar.draw(g);
+		drawSelectedTile(g);
 	}
 
-	private void drawButtons(Graphics2D g)
+	private void drawSelectedTile(Graphics2D g)
 	{
-		buttonMenu.draw(g);
+		if (selectedTile != null && drawSelection)
+			g.drawImage(selectedTile.getSprite(), mouseX, mouseY, selectedTile.getSize(), selectedTile.getSize(), null);
+	}
+
+	private void changeTile(int x, int y)
+	{
+		int tileX = x / SPRITE_SIZE;
+		int tileY = y / SPRITE_SIZE;
+
+		if (selectedTile == null)
+			return;
+
+		if(lastTileX == tileX && lastTileY == tileY && lastTileId == selectedTile.getId())
+			return;
+
+		lastTileX = tileX;
+		lastTileY = tileY;
+		lastTileId = selectedTile.getId();
+
+		level[tileY][tileX] = selectedTile.getId();
 	}
 
 	@Override
 	public void mouseClicked(int x, int y)
 	{
-		if(buttonMenu.getBounds().contains(x, y))
-			GameStates.setGameState(MAIN_MENU);
+		if (y >= 640)
+			bottomBar.mouseClicked(x, y);
+		else
+			changeTile(x, y);
 	}
 
 	@Override
 	public void mouseMoved(int x, int y)
 	{
-		buttonMenu.setMouseOver(buttonMenu.getBounds().contains(x, y));
+		mouseX = (x / SPRITE_SIZE) * SPRITE_SIZE;
+		mouseY = (y / SPRITE_SIZE) * SPRITE_SIZE;
+
+		if (y >= 640)
+		{
+			drawSelection = false;
+			bottomBar.mouseMoved(x, y);
+		}
+		else
+			drawSelection = true;
 	}
 
 	@Override
 	public void mousePressed(int x, int y)
 	{
-		buttonMenu.setMousePressed(buttonMenu.getBounds().contains(x, y));
+		if (y >= 640)
+			bottomBar.mousePressed(x, y);
 	}
 
 	@Override
 	public void mouseReleased(int x, int y)
 	{
 		resetButtons();
+		bottomBar.mouseReleased(x, y);
+	}
+
+	@Override
+	public void mouseDragged(int x, int y)
+	{
+		if (y < 640)
+			changeTile(x, y);
 	}
 
 	private void resetButtons()
 	{
-		buttonMenu.resetStates();
 	}
 
 	@Override
 	public void keyPressed(int key, int modifiers)
 	{
 
+	}
+
+	public void setSelectedTile(Tile selectedTile)
+	{
+		this.selectedTile = selectedTile;
+	}
+
+	public TileManager getTileManager()
+	{
+		return tileManager;
 	}
 }

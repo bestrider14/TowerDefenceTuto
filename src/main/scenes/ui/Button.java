@@ -1,38 +1,67 @@
 package main.scenes.ui;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Button
 {
 	private int x, y, width, height;
+	private BufferedImage image;
 	private String text;
 	private int borderSize = 2;
 	private boolean mouseOver = false;
 	private boolean mousePressed = false;
+	private boolean toggled = false;
 
 	private Color backgroundColor = Color.GRAY;
 	private Color backgroundColorOver = new Color(79, 79, 79);
 	private Color fontColor = Color.BLACK;
 	private Color borderColor = Color.BLACK;
+	private Color borderColorOver = new Color(107, 201, 7, 255);
+	private Color borderColorToggle = new Color(107, 201, 7, 255);
 
 	private Rectangle bounds;
 
 	public Button(String text, int x, int y, int width, int height)
 	{
+		this.text = text;
+		initButton(x, y, width, height);
+	}
+
+	public Button(BufferedImage image, int x, int y, int width, int height)
+	{
+		this.image = image;
+		initButton(x, y, width, height);
+	}
+
+	private void initButton(int x, int y, int width, int height)
+	{
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.text = text;
-
 		bounds = new Rectangle(x, y, width, height);
 	}
 
+
 	public void draw(Graphics2D g)
 	{
-		drawBody(g);
-		drawBorder(g);
-		drawText(g);
+		if(image == null)
+		{
+			drawBody(g);
+			drawBorder(g);
+			drawText(g);
+		}
+		else
+		{
+			drawBorder(g);
+			drawImage(g);
+		}
+	}
+
+	private void drawImage(Graphics2D g)
+	{
+		g.drawImage(image, x, y, width, height, null);
 	}
 
 	private void drawBorder(Graphics2D g)
@@ -40,7 +69,12 @@ public class Button
 		Stroke defaultStroke = g.getStroke();
 
 		g.setStroke(mousePressed ? new BasicStroke(borderSize + 2) : new BasicStroke(borderSize));
-		g.setColor(borderColor);
+
+		if(mouseOver || toggled)
+			g.setColor(borderColorOver);
+		else
+			g.setColor(borderColor);
+
 		g.drawRect(x, y, width, height);
 
 		g.setStroke(defaultStroke);
@@ -94,6 +128,16 @@ public class Button
 	public void setFontColor(Color fontColor)
 	{
 		this.fontColor = fontColor;
+	}
+
+	public void setToggled(boolean toggled)
+	{
+		this.toggled = toggled;
+	}
+
+	public boolean isToggled()
+	{
+		return toggled;
 	}
 
 	public void resetStates()

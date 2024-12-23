@@ -35,12 +35,12 @@ public class Game extends JFrame implements Runnable
 		setTitle("TowerDefense");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
-		setLocationRelativeTo(null);
 
 		initScnenes();
 
 		add(gameScreen);
 		pack();
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 

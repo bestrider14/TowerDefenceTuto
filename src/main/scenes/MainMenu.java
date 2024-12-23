@@ -47,9 +47,15 @@ public class MainMenu extends GameScene implements SceneMethods
 	public void mouseClicked(int x, int y)
 	{
 		if(buttonStart.getBounds().contains(x, y))
+		{
 			GameStates.setGameState(PLAYING);
+			buttonStart.resetStates();
+		}
 		else if (buttonSettings.getBounds().contains(x, y))
+		{
 			GameStates.setGameState(SETTINGS_MENU);
+			buttonSettings.resetStates();
+		}
 		else if (buttonExit.getBounds().contains(x, y))
 			game.setRunning(false);
 	}
@@ -74,6 +80,13 @@ public class MainMenu extends GameScene implements SceneMethods
 	public void mouseReleased(int x, int y)
 	{
 		resetButtons();
+		mouseMoved(x, y);
+	}
+
+	@Override
+	public void mouseDragged(int x, int y)
+	{
+
 	}
 
 	@Override

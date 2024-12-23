@@ -19,7 +19,7 @@ public class GameScreen extends JPanel
 	public GameScreen(Game game)
 	{
 		this.game = game;
-		setPanelSize(640, 640);
+		setPanelSize(640, 740);
 	}
 
 	private void setPanelSize(int width, int height)

@@ -43,6 +43,12 @@ public class SettingsMenu extends GameScene implements SceneMethods
 	}
 
 	@Override
+	public void mouseDragged(int x, int y)
+	{
+
+	}
+
+	@Override
 	public void keyPressed(int key, int modifiers)
 	{
 
