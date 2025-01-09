@@ -5,16 +5,10 @@ import inputs.MouseListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Random;
 
 public class GameScreen extends JPanel
 {
 	private final Game game;
-
-	private MouseListener mouseListener;
-	private KeyboardListener keyboardListener;
 
 	public GameScreen(Game game)
 	{
@@ -33,8 +27,8 @@ public class GameScreen extends JPanel
 
 	public void initInputs()
 	{
-		mouseListener = new MouseListener(game);
-		keyboardListener = new KeyboardListener();
+		MouseListener mouseListener = new MouseListener(game);
+		KeyboardListener keyboardListener = new KeyboardListener(game);
 
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);

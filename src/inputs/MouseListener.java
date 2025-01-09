@@ -8,7 +8,7 @@ import java.awt.event.MouseMotionListener;
 
 public class MouseListener implements java.awt.event.MouseListener, MouseMotionListener
 {
-	private Game game;
+	private final Game game;
 
 	public MouseListener(Game game)
 	{
@@ -21,9 +21,9 @@ public class MouseListener implements java.awt.event.MouseListener, MouseMotionL
 		switch (GameStates.gameState)
 		{
 			case PLAYING ->			game.getPlaying().mouseClicked(e.getX(), e.getY());
+			case EDITING -> 		game.getEditing().mouseClicked(e.getX(), e.getY());
 			case MAIN_MENU ->		game.getMainMenu().mouseClicked(e.getX(), e.getY());
 			case SETTINGS_MENU ->	{}
-			case EXIT_MENU ->		{}
 		}
 	}
 
@@ -33,9 +33,9 @@ public class MouseListener implements java.awt.event.MouseListener, MouseMotionL
 		switch (GameStates.gameState)
 		{
 			case PLAYING ->			game.getPlaying().mousePressed(e.getX(), e.getY());
+			case EDITING -> 		game.getEditing().mousePressed(e.getX(), e.getY());
 			case MAIN_MENU ->		game.getMainMenu().mousePressed(e.getX(), e.getY());
 			case SETTINGS_MENU ->	{}
-			case EXIT_MENU ->		{}
 		}
 	}
 
@@ -45,9 +45,9 @@ public class MouseListener implements java.awt.event.MouseListener, MouseMotionL
 		switch (GameStates.gameState)
 		{
 			case PLAYING ->			game.getPlaying().mouseReleased(e.getX(), e.getY());
+			case EDITING -> 		game.getEditing().mouseReleased(e.getX(), e.getY());
 			case MAIN_MENU ->		game.getMainMenu().mouseReleased(e.getX(), e.getY());
 			case SETTINGS_MENU ->	{}
-			case EXIT_MENU ->		{}
 		}
 	}
 
@@ -69,9 +69,9 @@ public class MouseListener implements java.awt.event.MouseListener, MouseMotionL
 		switch (GameStates.gameState)
 		{
 			case PLAYING ->			game.getPlaying().mouseDragged(e.getX(), e.getY());
+			case EDITING -> 		game.getEditing().mouseDragged(e.getX(), e.getY());
 			case MAIN_MENU ->		{}
 			case SETTINGS_MENU ->	{}
-			case EXIT_MENU ->		{}
 		}
 	}
 
@@ -81,9 +81,9 @@ public class MouseListener implements java.awt.event.MouseListener, MouseMotionL
 		switch (GameStates.gameState)
 		{
 			case PLAYING ->			game.getPlaying().mouseMoved(e.getX(), e.getY());
+			case EDITING -> 		game.getEditing().mouseMoved(e.getX(), e.getY());
 			case MAIN_MENU ->		game.getMainMenu().mouseMoved(e.getX(), e.getY());
 			case SETTINGS_MENU ->	{}
-			case EXIT_MENU ->		{}
 		}
 	}
 }

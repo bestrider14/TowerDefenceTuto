@@ -12,6 +12,7 @@ public class Button
 	private boolean mouseOver = false;
 	private boolean mousePressed = false;
 	private boolean toggled = false;
+	private boolean active = true;
 
 	private Color backgroundColor = Color.GRAY;
 	private Color backgroundColorOver = new Color(79, 79, 79);
@@ -46,14 +47,12 @@ public class Button
 
 	public void draw(Graphics2D g)
 	{
-		if(image == null)
-		{
+		if (image == null) {
 			drawBody(g);
 			drawBorder(g);
 			drawText(g);
 		}
-		else
-		{
+		else {
 			drawBorder(g);
 			drawImage(g);
 		}
@@ -70,7 +69,7 @@ public class Button
 
 		g.setStroke(mousePressed ? new BasicStroke(borderSize + 2) : new BasicStroke(borderSize));
 
-		if(mouseOver || toggled)
+		if (mouseOver || toggled)
 			g.setColor(borderColorOver);
 		else
 			g.setColor(borderColor);
@@ -103,6 +102,12 @@ public class Button
 	public void setBackgroundColor(Color backgroundColor)
 	{
 		this.backgroundColor = backgroundColor;
+	}
+
+	public void setImage(BufferedImage image)
+	{
+		this.text = null;
+		this.image = image;
 	}
 
 	public void setBorderColor(Color borderColor)
@@ -138,6 +143,19 @@ public class Button
 	public boolean isToggled()
 	{
 		return toggled;
+	}
+
+	public boolean isActive()
+	{
+		return active;
+	}
+
+	public void setActive(boolean active)
+	{
+		this.active = active;
+
+		if (!active)
+			this.toggled = false;
 	}
 
 	public void resetStates()

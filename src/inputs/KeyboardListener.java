@@ -8,23 +8,31 @@ import java.awt.event.KeyListener;
 
 public class KeyboardListener implements KeyListener
 {
+	private Game game;
+
+	public KeyboardListener(Game game)
+	{
+		this.game = game;
+	}
+
 	@Override
 	public void keyTyped(KeyEvent e)
 	{
-		if(e.getKeyChar() == 'a')
-			GameStates.gameState = GameStates.MAIN_MENU;
-		else if (e.getKeyChar() == 's')
-			GameStates.gameState = GameStates.SETTINGS_MENU;
-		else if (e.getKeyChar() == 'd')
-			GameStates.gameState = GameStates.PLAYING;
-
-		else if (e.getKeyChar() == ']')
+		if (e.getKeyChar() == ']')
 		{
 			Game.showCounter = !Game.showCounter;
 			if(Game.showCounter)
 				System.out.println("Show counter");
 			else
 				System.out.println("Hide counter");
+		}
+
+		switch (GameStates.gameState)
+		{
+			case PLAYING ->			game.getPlaying().keyPressed(e.getKeyChar(), e.getModifiersEx());
+			case EDITING -> 		game.getEditing().keyPressed(e.getKeyChar(), e.getModifiersEx());
+			case MAIN_MENU ->		{}
+			case SETTINGS_MENU ->	{}
 		}
 	}
 

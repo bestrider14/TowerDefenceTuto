@@ -1,17 +1,17 @@
 package main;
 
-import inputs.KeyboardListener;
-import inputs.MouseListener;
-import main.scenes.GameScene;
-import main.scenes.MainMenu;
-import main.scenes.Playing;
-import main.scenes.SettingsMenu;
+import main.managers.TileManager;
+import main.objects.PathPoint;
+import main.objects.Tile;
+import main.scenes.*;
+import utils.LoadSave;
 
 import javax.swing.*;
 
 public class Game extends JFrame implements Runnable
 {
 	private GameScreen gameScreen;
+	private final TileManager tileManager;
 	private Render render;
 	private Thread gameThread;
 
@@ -24,6 +24,7 @@ public class Game extends JFrame implements Runnable
 	private Playing playing;
 	private MainMenu mainMenu;
 	private SettingsMenu settingsMenu;
+	private Editing editing;
 
 	public static boolean showCounter = true;
 
@@ -36,7 +37,10 @@ public class Game extends JFrame implements Runnable
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 
+		tileManager = new TileManager();
+
 		initScnenes();
+		createDefaultLevel();
 
 		add(gameScreen);
 		pack();
@@ -51,7 +55,18 @@ public class Game extends JFrame implements Runnable
 		this.mainMenu = new MainMenu(this);
 		this.settingsMenu = new SettingsMenu(this);
 		this.playing = new Playing(this);
+		this.editing = new Editing(this);
+
 	}
+
+	private void createDefaultLevel()
+	{
+		int[] array = new int[400];
+		PathPoint start = new PathPoint(0,0, PathPoint.PathPointType.START, null);
+		PathPoint end = new PathPoint(0,0, PathPoint.PathPointType.END, null);
+		LoadSave.createLevel("new_level", array, start, end);
+	}
+
 
 	@Override
 	public void run()
@@ -62,14 +77,14 @@ public class Game extends JFrame implements Runnable
 		long lastFrame = System.nanoTime();
 		long lastUpdate = System.nanoTime();
 		long lastTimeCheck = System.currentTimeMillis();
-        long now;
+		long now;
 
 		int fps = 0;
 		int ups = 0;
 
 		while (running)
 		{
-            now = System.nanoTime();
+			now = System.nanoTime();
 
 			// Render
 			if (now - lastFrame >= timePerFrame)
@@ -102,7 +117,21 @@ public class Game extends JFrame implements Runnable
 
 	private void update()
 	{
+		updateTick();
 
+		switch (GameStates.gameState)
+		{
+			case PLAYING -> playing.update();
+			case MAIN_MENU ->
+			{
+			}
+			case SETTINGS_MENU ->
+			{
+			}
+			case EDITING ->
+			{
+			}
+		}
 	}
 
 	public void start()
@@ -133,8 +162,24 @@ public class Game extends JFrame implements Runnable
 		return settingsMenu;
 	}
 
+	public Editing getEditing()
+	{
+		return editing;
+	}
+
 	public void setRunning(boolean running)
 	{
 		this.running = running;
+	}
+
+	public TileManager getTileManager()
+	{
+		return tileManager;
+	}
+
+	private void updateTick()
+	{
+		for (Tile tile : tileManager.tiles.values())
+			tile.updateTick();
 	}
 }

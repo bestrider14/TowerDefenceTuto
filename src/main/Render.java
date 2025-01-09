@@ -16,6 +16,7 @@ public class Render
 		switch (GameStates.gameState)
 		{
 			case PLAYING ->			game.getPlaying().render(g);
+			case EDITING -> 		game.getEditing().render(g);
 			case SETTINGS_MENU ->	game.getSettingsMenu().render(g);
 			case MAIN_MENU ->		game.getMainMenu().render(g);
 		}
