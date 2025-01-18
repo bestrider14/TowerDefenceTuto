@@ -17,7 +17,7 @@ The project is still in progress. While the core mechanics and structure are in 
 
 ## Installation
 1. Clone the repository:  
-   `git clone https://github.com/yourusername/project-name.git`
+   `[git clone https://github.com/bestrider14/TowerDefenceTuto.git]`
 2. Navigate to the project directory.
 3. Compile and run the project using your preferred IDE or via the command line.
 
